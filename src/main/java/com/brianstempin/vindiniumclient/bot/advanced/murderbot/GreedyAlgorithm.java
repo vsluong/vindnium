@@ -31,10 +31,11 @@ public class GreedyAlgorithm implements Decision<AdvancedMurderBot.GameContext, 
 
 
     	//maximum distance to snag the low-hanging fruit
-    	int max = 4;
+    	int max = 20;
     	//my id
     	int me = context.getGameState().getMe().getId();
-    	
+    	Mine bestMine = null;
+    	int bestDistance = Integer.MAX_VALUE;
     	//look through all mines
     	for(Mine m : context.getGameState().getMines().values())
     	{
@@ -57,9 +58,19 @@ public class GreedyAlgorithm implements Decision<AdvancedMurderBot.GameContext, 
                 continue;
             }
     		
-    		//otherwise, it's a free mine
-    		//go and get it
-    		GameState.Position nextPosition = m.getPosition();
+    		if(distance <= bestDistance)
+    		{
+    			bestDistance = distance;
+    			bestMine = m;
+    		}
+    	}
+    	
+    	if(bestMine != null)
+    	{
+    		AdvancedMurderBot.DijkstraResult currentDijkstraResult =
+    				context.getDijkstraResultMap().get(bestMine.getPosition());
+    		//if found a nice mine
+    		GameState.Position nextPosition = bestMine.getPosition();
     		while(null != currentDijkstraResult && currentDijkstraResult.getDistance() > 1) {
                 nextPosition = currentDijkstraResult.getPrevious();
                 currentDijkstraResult = context.getDijkstraResultMap().get(nextPosition);
