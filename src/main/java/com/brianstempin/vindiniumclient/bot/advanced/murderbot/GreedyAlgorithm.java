@@ -31,7 +31,7 @@ public class GreedyAlgorithm implements Decision<AdvancedMurderBot.GameContext, 
 
 
     	//maximum distance to snag the low-hanging fruit
-    	int max = 20;
+    	int max = context.getGameState().getMines().size() / 4;
     	//my id
     	int me = context.getGameState().getMe().getId();
     	Mine bestMine = null;
